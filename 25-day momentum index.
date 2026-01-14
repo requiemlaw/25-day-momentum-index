@@ -1,0 +1,28 @@
+// This Pine Script® code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © requiemlaw
+
+//@version=5
+indicator(title="25-Day Momentum Index (Doğru Opaklık)", shorttitle="25-day Momentum Index", format=format.price, precision=2, overlay=false)
+
+// --- Girdiler ---
+length = input.int(25, minval=1, title="Momentum Periyodu")
+src = input.source(close, title="Kaynak")
+
+// --- Hesaplama ---
+mom = src - src[length]
+
+// --- Çizimler ---
+
+// 1. Sıfır Çizgisi
+hline(0, "Sıfır Çizgisi", color=color.gray, linestyle=hline.style_solid, linewidth=1)
+
+// 2. Momentum Eğrisi (Siyah Ana Çizgi)
+plot(mom, title="Momentum", color=color.black, linewidth=2)
+
+// 3. Renkli Bölgeler (DÜZELTİLDİ)
+// Mantık: Pine Script "Şeffaflık" ister. 
+// %27 Opaklık için -> 73 Şeffaflık girilmeli.
+// %26 Opaklık için -> 74 Şeffaflık girilmeli.
+plot(mom, title="Momentum Bölgesi", 
+     color=mom >= 0 ? color.new(#434651, 73) : color.new(#801922, 74), 
+     style=plot.style_area)
